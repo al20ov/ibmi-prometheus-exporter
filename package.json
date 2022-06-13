@@ -1,0 +1,15 @@
+{
+  "name": "ibmi-prometheus",
+  "version": "0.0.1",
+  "description": "A Prometheus exporter for IBMi",
+  "main": "main.js",
+  "dependencies": {
+    "prom-client": "^14.0.1",
+    "idb-connector": "^1.2.16"
+  },
+  "scripts": {
+    "start": "node main.js"
+  },
+  "author": "Nicolas R. Antoine",
+  "license": "UNLICENSED"
+}
