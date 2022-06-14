@@ -1,27 +1,32 @@
 const { dbconn, dbstmt } = require("idb-connector");
 
-const keys = require("./keys");
+const metricsList = require("../config/metrics.json");
 
-const sSql = "select * from QSYS2.SYSTEM_STATUS_INFO";
+const MetricsQuery = require("./MetricsQuery");
 
 const connection = new dbconn();
 connection.conn("*LOCAL");
 const statement = new dbstmt(connection);
 
-const metrics = async (res, register, metricsGauges) => {
-  const sys_usage = statement.execSync(sSql)[0];
+let metricsQueries = [];
 
-  statement.closeCursor();
-  for (const [key, value] of Object.entries(metricsGauges)) {
-    if (keys.includes(key)) {
-      value.set(Number(sys_usage[key]));
-    }
+const generateMetricsQueries = (register) => {
+  for (const source of metricsList) {
+    const newMetricsQuery = new MetricsQuery(
+      source.table,
+      source.metricsList,
+      register,
+    );
+
+    metricsQueries.push(newMetricsQuery);
   }
+};
 
+const metrics = async (res, register) => {
+  metricsQueries.forEach((metric) => metric.updateGauges(statement));
   res.setHeader("Content-Type", register.contentType);
 
   res.end(await register.metrics());
-  // res.end(JSON.stringify(sys_usage));
 };
 
 const notFound = (res) => {
@@ -33,4 +38,14 @@ const notFound = (res) => {
 module.exports = {
   metrics,
   notFound,
+  generateMetricsQueries,
 };
+
+// const sys_usage = statement.execSync(sSql)[0];
+
+// statement.closeCursor();
+// for (const [key, value] of Object.entries(metricsGauges)) {
+//   if (names.includes(key)) {
+//     value.set(Number(sys_usage[key]));
+//   }
+// }

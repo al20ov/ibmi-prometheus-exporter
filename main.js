@@ -2,8 +2,6 @@ const http = require("http");
 const url = require("url");
 const client = require("prom-client");
 
-const keys = require("./src/keys");
-
 const router = require("./src/router");
 
 const PORT = process.env.PORT || 7203;
@@ -15,21 +13,13 @@ register.setDefaultLabels({
   service: "IBM i system metrics",
 });
 
-let metricsGauges = {};
-
-keys.map((key) => {
-  metricsGauges[key] = new client.Gauge({
-    name: key,
-    help: `"${key.toLowerCase()}" metric`,
-  });
-  register.registerMetric(metricsGauges[key]);
-});
+router.generateMetricsQueries(register);
 
 const server = http.createServer(async (req, res) => {
   const route = url.parse(req.url, true).pathname;
 
   if (route === "/metrics") {
-    router.metrics(res, register, metricsGauges);
+    router.metrics(res, register);
   } else {
     router.notFound(res);
   }
@@ -38,3 +28,6 @@ const server = http.createServer(async (req, res) => {
 server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
+
+// For CPU metrics (not enough rights on public ibm i server)
+// select * from table(QSYS2.SYSTEM_ACTIVITY_INFO())
