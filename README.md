@@ -14,7 +14,7 @@ of jobs running, etc... or even add metrics with custom DB2 queries (using data
 in QSYS2 or the COUNT() statement).
 
 <p align="center">
-  <img width="700" src="https://user-images.githubusercontent.com/21371349/173726962-4b3ff01f-0f40-41b8-b992-2e6c14704990.svg">
+  <img width="700" src="https://user-images.githubusercontent.com/21371349/173734026-b8266ae7-d68f-450e-8d96-427be2d561a8.svg">
 </p>
 
 ## Installing the exporter on IBM i
