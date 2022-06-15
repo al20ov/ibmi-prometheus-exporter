@@ -36,7 +36,7 @@ scp or FTP.
 but you can override this with an environment variable, for example, for a
 one-off override, you can run it with `PORT=8080 npm start`
 
-## Prometheus configuration to scrape data from the exporter
+## Prometheus configuration
 
 Here is an example `prometheus.yml` config to scrape data from the exporter:
 
@@ -48,5 +48,53 @@ scrape_configs:
   - job_name: 'ibmi'
     scrape_interval: '5s'
     static_configs:
-      - targets: [ '<IP or hostname of the IBM i partition that the exporter is running on>:7203' ]
+      - targets: [ '<IP or hostname of the IBM i partition the exporter is running on>:7203' ]
 ```
+
+## Adding/removing metrics to query
+
+Adding metrics beyond those already included in metrics.json can require
+modifying some of the code in `src/router.js` and `src/MetricsQuery.js` to fit
+your needs, however, we think the code is simple enough and you should be able
+to understand it.
+
+All the metrics that this tool queries are configured in `config/metrics.json`.
+The schema this JSON file uses is an array of objects that contains the
+following:
+
+```json
+{
+  "name": "Name of the metric",
+  "table": "Name of the DB2 table containing these metrics",
+  "metricsList": [
+    "column 1",
+    "column 2",
+    "column 3"
+  ]
+}
+```
+
+Refer to the metrics.json file provided in this repo if you need an example.
+
+The metrics.json file provided by default only includes one DB2 query for some
+metrics, but it does not include certain metrics such as CPU usage. To add CPU
+usage metrics, add these lines to `config/metrics.json`:
+
+```json
+  ...
+  },
+  {
+    "name": "SYSTEM_ACTIVITY_INFO",
+    "table": "QSYS2.SYSTEM_ACTIVITY_INFO",
+    "metricsList": [
+      "AVERAGE_CPU_RATE",
+      "AVERAGE_CPU_UTILIZATION",
+      "MINIMUM_CPU_UTILIZATION",
+      "MAXIMUM_CPU_UTILIZATION"
+    ]
+  }
+]
+```
+
+Keep in mind that access to `QSYS2.SYSTEM_ACTIVITY_INFO` requires `*JOBCTL`
+authority.
