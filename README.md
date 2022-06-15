@@ -2,6 +2,8 @@
 
 A configurable Prometheus exporter for IBM i metrics data
 
+![image](https://user-images.githubusercontent.com/21371349/173723964-d088bb5a-e9f1-4027-ba72-f51999d82e41.png)
+
 ## Who is this project for?
 
 Companies and organizations with a Grafana + Prometheus stack who want to be
