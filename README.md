@@ -78,22 +78,20 @@ Refer to the metrics.json file provided in this repo if you need an example.
 
 The metrics.json file provided by default only includes one DB2 query for some
 metrics, but it does not include certain metrics such as CPU usage. To add CPU
-usage metrics, add these lines to `config/metrics.json`:
+usage metrics, add these lines to `config/metrics.json` right at the end of the
+array:
 
 ```json
-  ...
-  },
-  {
-    "name": "SYSTEM_ACTIVITY_INFO",
-    "table": "QSYS2.SYSTEM_ACTIVITY_INFO",
-    "metricsList": [
-      "AVERAGE_CPU_RATE",
-      "AVERAGE_CPU_UTILIZATION",
-      "MINIMUM_CPU_UTILIZATION",
-      "MAXIMUM_CPU_UTILIZATION"
-    ]
-  }
-]
+{
+  "name": "SYSTEM_ACTIVITY_INFO",
+  "table": "QSYS2.SYSTEM_ACTIVITY_INFO",
+  "metricsList": [
+    "AVERAGE_CPU_RATE",
+    "AVERAGE_CPU_UTILIZATION",
+    "MINIMUM_CPU_UTILIZATION",
+    "MAXIMUM_CPU_UTILIZATION"
+  ]
+}
 ```
 
 Keep in mind that access to `QSYS2.SYSTEM_ACTIVITY_INFO` requires `*JOBCTL`
