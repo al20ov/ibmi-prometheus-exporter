@@ -1,3 +1,5 @@
+[![Node.js CI](https://github.com/al20ov/ibmi-prometheus-exporter/actions/workflows/dependencies.yml/badge.svg?branch=main)](https://github.com/al20ov/ibmi-prometheus-exporter/actions/workflows/dependencies.yml)
+
 # IBM i Prometheus exporter
 
 A configurable Prometheus exporter for IBM i metrics data
