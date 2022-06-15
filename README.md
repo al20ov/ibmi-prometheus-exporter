@@ -11,6 +11,10 @@ able to extract metric data from IBM i such as ASP usage, memory usage, number
 of jobs running, etc... or even add metrics with custom DB2 queries (using data
 in QSYS2 or the COUNT() statement).
 
+<p align="center">
+  <img width="700" src="https://user-images.githubusercontent.com/21371349/173726962-4b3ff01f-0f40-41b8-b992-2e6c14704990.svg">
+</p>
+
 ## Installing the exporter on IBM i
 
 To install the exporter, you need to have access to the PASE environment, as
@@ -31,3 +35,18 @@ scp or FTP.
 4. Start the exporter with `npm start`. By default, it runs on TCP port `7203`,
 but you can override this with an environment variable, for example, for a
 one-off override, you can run it with `PORT=8080 npm start`
+
+## Prometheus configuration to scrape data from the exporter
+
+Here is an example `prometheus.yml` config to scrape data from the exporter:
+
+```yml
+global:
+  scrape_interval: '5s'
+
+scrape_configs:
+  - job_name: 'ibmi'
+    scrape_interval: '5s'
+    static_configs:
+      - targets: [ '<IP or hostname of the IBM i partition that the exporter is running on>:7203' ]
+```
