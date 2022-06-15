@@ -19,7 +19,9 @@ const server = http.createServer(async (req, res) => {
   const route = url.parse(req.url, true).pathname;
 
   if (route === "/metrics") {
-    router.metrics(res, register);
+    router.metrics(req, res, register);
+  } else if (route === "/metrics/list") {
+    router.getMetrics(res);
   } else {
     router.notFound(res);
   }
